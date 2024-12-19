@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import { CssBaseline } from "@mui/material";
@@ -49,7 +47,7 @@ const Home = () => {
   };
 
   // 修改查询参数
-  const [queryParams, updateQueryParams] = useQueryParams({});
+  const [queryParams, updateQueryParams] = useQueryParams();
 
   // 修改 fetchGameRecords，接受动态的 queryParams
   const fetchGameRecords = async (page: number, pageSize: number) => {

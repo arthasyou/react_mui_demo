@@ -1,31 +1,31 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// useQueryParams.ts
 import { useState } from "react";
 
-const useQueryParams = (initialParams: any = {}) => {
-  const [queryParams, setQueryParams] = useState(initialParams);
+// 定义一个类型，表示查询参数的值可以是 string、number、boolean、null 或 undefined
+export type QueryParamsType = Record<
+  string,
+  string | number | boolean | null | undefined
+>;
 
-  // 更新 queryParams，可以增加、修改或删除参数
-  const updateQueryParams = (newParams: any) => {
-    setQueryParams((prevParams: any) => {
+const useQueryParams = <T extends QueryParamsType>(
+  initialParams: T = {} as T
+) => {
+  const [queryParams, setQueryParams] = useState<T>(initialParams);
+
+  const updateQueryParams = (newParams: Partial<T>) => {
+    setQueryParams((prevParams: T) => {
       const updatedParams = { ...prevParams };
-
-      // 遍历 newParams，并根据需要进行增删操作
       for (const [key, value] of Object.entries(newParams)) {
         if (value === null || value === undefined) {
-          // 如果值是 null 或 undefined，删除这个字段
           delete updatedParams[key];
         } else {
-          // 否则，更新或者增加字段
-          updatedParams[key] = value;
+          updatedParams[key as keyof T] = value;
         }
       }
-
       return updatedParams;
     });
   };
 
-  return [queryParams, updateQueryParams];
+  return [queryParams, updateQueryParams] as const;
 };
 
 export default useQueryParams;
