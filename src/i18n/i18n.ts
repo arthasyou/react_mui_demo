@@ -10,7 +10,7 @@ i18n
   .init({
     fallbackLng: "en", // 默认语言
     // lng: "zhCN",
-    debug: true, // 开发模式下开启调试
+    debug: false, // 开发模式下开启调试
 
     interpolation: {
       escapeValue: false, // React 已经安全转义
