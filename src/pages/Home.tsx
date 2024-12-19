@@ -1,26 +1,22 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 import { CssBaseline } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
-import useQueryParams from "@/hook/useQeuryParams";
+import {
+  QueryForm,
+  QueryTextField,
+  QuerySelect,
+} from "@/components/data/QueryForm"; // 引入 QueryForm 组件
+import { QueryParamsType } from "@/hook/useQeuryParams";
 
-// 传入示例数据
+// 示例数据的列定义
 const columns: GridColDef[] = [
   { field: "tid", headerName: "ID", width: 90 },
-  {
-    field: "type",
-    headerName: "type",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "lastName",
-    headerName: "Last name",
-    width: 150,
-    editable: true,
-  },
+  { field: "type", headerName: "Type", width: 150, editable: true },
+  { field: "lastName", headerName: "Last name", width: 150, editable: true },
   {
     field: "age",
     headerName: "Age",
@@ -37,7 +33,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-// 使用 useState 来管理查询参数
+// 主页组件
 const Home = () => {
   const { t, i18n } = useTranslation();
 
@@ -46,21 +42,31 @@ const Home = () => {
     i18n.changeLanguage(lng);
   };
 
-  // 修改查询参数
-  const [queryParams, updateQueryParams] = useQueryParams();
+  // 使用 queryParams 存储查询参数
+  const [queryParams, setQueryParams] = useState<QueryParamsType>({});
 
-  // 修改 fetchGameRecords，接受动态的 queryParams
+  // 更新查询参数函数
+  const updateQueryParams = (newParams: QueryParamsType) => {
+    setQueryParams((prevParams) => ({ ...prevParams, ...newParams }));
+  };
+
+  // 动态更新的数据获取函数
   const fetchGameRecords = async (page: number, pageSize: number) => {
     const payload = {
       skip: page * pageSize, // 计算分页的偏移量
       limit: pageSize, // 每页条数
-      ...queryParams, // 将 queryParams 传递给 API
+      ...queryParams, // 将查询参数传递给 API
     };
     const response = await getGameRecord(payload);
     return {
       rows: response.records, // 返回数据记录
       totalCount: response.total, // 返回总记录数
     };
+  };
+
+  // 处理搜索按钮的点击事件，更新查询参数
+  const handleSearch = (newParams: QueryParamsType) => {
+    updateQueryParams(newParams); // 更新查询参数
   };
 
   return (
@@ -86,25 +92,29 @@ const Home = () => {
           中文
         </Button>
 
-        {/* 动态查询按钮示例 */}
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => updateQueryParams({ type: "newType" })} // 更新查询参数
-          style={{ marginTop: "20px" }}
-        >
-          更新查询参数
-        </Button>
-
-        {/* 动态查询按钮示例 */}
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => updateQueryParams({ type: null })} // 更新查询参数
-          style={{ marginTop: "20px" }}
-        >
-          减少查询参数
-        </Button>
+        {/* 查询表单组件 */}
+        <QueryForm onSearch={handleSearch}>
+          <QueryTextField
+            label="type"
+            name="type"
+            value={queryParams.type || ""}
+            onChange={() => {}}
+          />
+          <QueryTextField
+            label="Last Name"
+            name="lastName"
+            value={queryParams.lastName || ""}
+            onChange={() => {}}
+          />
+          <QuerySelect
+            label="Age"
+            name="age"
+            value={queryParams.age || ""}
+            onChange={() => {}}
+            options={["10", "20", "30", "40"]} // 示例选项
+            width="200px"
+          />
+        </QueryForm>
 
         <DataTable
           columns={columns}

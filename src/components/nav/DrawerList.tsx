@@ -83,13 +83,12 @@ const DrawerList: React.FC<DrawerListProps> = ({ items, open }) => {
                   pl: open ? level * 4 + 2 : 2, // 当Drawer打开时有缩进，关闭时左侧保持2px的间距
                   // 高亮选中项，使用 theme.palette.primary.main
                   backgroundColor: isSelected
-                    ? theme.palette.primary.main // 使用主题的 primary.main
-                    : "transparent", // 默认透明背景
-                  "&:hover": {
-                    backgroundColor: isSelected
-                      ? theme.palette.primary.dark // 使用 primary.dark 作为 hover 颜色
-                      : theme.palette.action.hover, // 默认 hover 效果
-                  },
+                    ? theme.palette.action.selected
+                    : "transparent",
+                  // color: theme.palette.primary.main,
+                  color: isSelected
+                    ? theme.palette.primary.main
+                    : theme.palette.text.primary,
                 }}
                 onClick={() => {
                   if (item.children) {
