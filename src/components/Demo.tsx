@@ -1,6 +1,5 @@
 // import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import Button from "@mui/material/Button";
+
 import { CssBaseline, Typography } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
@@ -9,6 +8,7 @@ import {
   QueryForm,
   QueryTextField,
   QuerySelect,
+  QueryDateTime,
 } from "@/components/data/QueryForm"; // 引入 QueryForm 组件
 import { useQueryParams, QueryParamsType } from "@/hook/useQeuryParams";
 
@@ -35,15 +35,13 @@ const columns: GridColDef[] = [
 
 // 主页组件
 const Home = () => {
-  const { t, i18n } = useTranslation();
-
-  // 更新语言
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
-
   // 使用 queryParams 存储查询参数
-  const [queryParams, updateQueryParams] = useQueryParams();
+  const [queryParams, updateQueryParams] = useQueryParams({
+    type: "123",
+    lastName: "234",
+    age: "10",
+    time: 1734152314000,
+  });
 
   // 动态更新的数据获取函数
   const fetchGameRecords = async (page: number, pageSize: number) => {
@@ -70,46 +68,31 @@ const Home = () => {
     <div>
       <CssBaseline />
       <Typography variant="h5">Home</Typography>
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <h1>{t("welcome")}</h1>
-        <p>{t("description")}</p>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => changeLanguage("en")}
-          style={{ marginRight: "10px" }}
-        >
-          English
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => changeLanguage("zhCN")}
-        >
-          中文
-        </Button>
-
+      <div style={{ textAlign: "center", marginTop: "10px" }}>
         {/* 查询表单组件 */}
-        <QueryForm onSearch={handleSearch}>
+        <QueryForm onSearch={handleSearch} queryParams={queryParams}>
           <QueryTextField
             label="type"
             name="type"
-            value={queryParams.type}
-            onChange={() => {}}
+            value={queryParams.type || ""}
+            width={100}
           />
           <QueryTextField
             label="Last Name"
             name="lastName"
-            value={queryParams.lastName}
-            onChange={() => {}}
+            value={queryParams.lastName || ""}
           />
           <QuerySelect
             label="Age"
             name="age"
-            value={queryParams.age}
-            onChange={() => {}}
+            value={queryParams.age || ""}
             options={["10", "20", "30", "40"]} // 示例选项
             width="200px"
+          />
+          <QueryDateTime
+            label="创建时间"
+            name="time"
+            value={queryParams.time}
           />
         </QueryForm>
 

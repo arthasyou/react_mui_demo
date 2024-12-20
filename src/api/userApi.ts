@@ -1,13 +1,44 @@
-import { request } from './api'
-import type { CommonResponse } from './commonResponse'
+import { request } from "./api";
+import type { CommonResponse } from "./commonResponse";
+
+interface LoginPayload {
+  username: string;
+  password: string;
+}
+
+interface AuthResponse extends CommonResponse {
+  user: {
+    account: string;
+    balance_status: number;
+    create_time: number;
+    group_id: number;
+    last_login_time: number;
+    name: string;
+    role: number;
+    status: number;
+    tid: number;
+    type: number;
+    update_time: number;
+  };
+}
+
+export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
+  const response = await request<LoginPayload, AuthResponse>({
+    method: "POST",
+    url: "pub/login",
+    body: payload,
+  });
+  return response.data; // 解构 data，返回具体类型
+};
+
 interface AddUserPayload {
-  name: string
-  account: string
-  type: number
-  role: number
-  password: string
-  balance: number
-  operate_pass: string
+  name: string;
+  account: string;
+  type: number;
+  role: number;
+  password: string;
+  balance: number;
+  operate_pass: string;
 }
 
 /**
@@ -15,50 +46,52 @@ interface AddUserPayload {
  * @param payload - 添加用户参数
  * @returns 添加用户响应
  */
-export const addUser = async (payload: AddUserPayload): Promise<CommonResponse> => {
+export const addUser = async (
+  payload: AddUserPayload
+): Promise<CommonResponse> => {
   const response = await request<AddUserPayload, CommonResponse>({
-    method: 'POST',
-    url: 'usr/addUser',
+    method: "POST",
+    url: "usr/addUser",
     body: payload,
-  })
-  return response.data
-}
+  });
+  return response.data;
+};
 
 interface SearchUserPayload {
-  type: number
-  role: number
-  status: string
-  balance_status: string
-  key?: string
-  offset?: number
-  limit?: number
+  type: number;
+  role: number;
+  status: string;
+  balance_status: string;
+  key?: string;
+  offset?: number;
+  limit?: number;
 }
 
 export interface SearchUserResponse extends CommonResponse {
-  users: User[]
-  balances: undefined[]
+  users: User[];
+  balances: undefined[];
 }
 
 export interface User {
-  tid: number
-  type: number
-  role: number
-  name: string
-  account: string
-  phone: string
-  email: string
-  password: string
-  trade_pass: string
-  image: string
-  creator: number
-  parent_id: number
-  balance_status: number
-  sub_count: number
-  group_id: number
-  last_login_time: string
-  update_time: string
-  create_time: string
-  status: number
+  tid: number;
+  type: number;
+  role: number;
+  name: string;
+  account: string;
+  phone: string;
+  email: string;
+  password: string;
+  trade_pass: string;
+  image: string;
+  creator: number;
+  parent_id: number;
+  balance_status: number;
+  sub_count: number;
+  group_id: number;
+  last_login_time: string;
+  update_time: string;
+  create_time: string;
+  status: number;
 }
 
 // interface Balance {
@@ -77,17 +110,19 @@ export interface User {
  * @param payload - 搜索用户参数
  * @returns 搜索用户响应
  */
-export const searchUser = async (payload: SearchUserPayload): Promise<SearchUserResponse> => {
+export const searchUser = async (
+  payload: SearchUserPayload
+): Promise<SearchUserResponse> => {
   const response = await request<SearchUserPayload, SearchUserResponse>({
-    method: 'GET',
-    url: 'usr/searchUser',
+    method: "GET",
+    url: "usr/searchUser",
     body: payload,
-  })
-  return response.data
-}
+  });
+  return response.data;
+};
 
 interface LogoutUserPayload {
-  user_id: number
+  user_id: number;
 }
 
 /**
@@ -95,14 +130,16 @@ interface LogoutUserPayload {
  * @param payload - 注销用户参数
  * @returns 注销用户响应
  */
-export const logoutUser = async (payload: LogoutUserPayload): Promise<CommonResponse> => {
+export const logoutUser = async (
+  payload: LogoutUserPayload
+): Promise<CommonResponse> => {
   const response = await request<LogoutUserPayload, CommonResponse>({
-    method: 'POST',
-    url: 'usr/logoutUser',
+    method: "POST",
+    url: "usr/logoutUser",
     body: payload,
-  })
-  return response.data
-}
+  });
+  return response.data;
+};
 
 /**
  * 自己注销
@@ -110,20 +147,20 @@ export const logoutUser = async (payload: LogoutUserPayload): Promise<CommonResp
  */
 export const logout = async () => {
   const response = await request<CommonResponse>({
-    method: 'POST',
-    url: 'usr/logout',
-  })
-  return response.data
-}
+    method: "POST",
+    url: "usr/logout",
+  });
+  return response.data;
+};
 
 interface UpdateUserPayload {
-  tid: number // 用户ID 不传默认修改自身
-  name: string // 名称
-  password: string // 密码
-  old_password: string // 旧密码
-  status: number // 100 正常 200 冻结
-  balance_status: number // 100 正常 200 冻结
-  operate_pass: string // 操作密码
+  tid: number; // 用户ID 不传默认修改自身
+  name: string; // 名称
+  password: string; // 密码
+  old_password: string; // 旧密码
+  status: number; // 100 正常 200 冻结
+  balance_status: number; // 100 正常 200 冻结
+  operate_pass: string; // 操作密码
 }
 
 // 修改自己密码例子
@@ -144,19 +181,21 @@ interface UpdateUserPayload {
  * @param payload - 更新用户参数
  * @returns 更新用户响应
  */
-export const updateUser = async (payload: UpdateUserPayload): Promise<CommonResponse> => {
+export const updateUser = async (
+  payload: UpdateUserPayload
+): Promise<CommonResponse> => {
   const response = await request<UpdateUserPayload, CommonResponse>({
-    method: 'POST',
-    url: 'usr/updateUser',
+    method: "POST",
+    url: "usr/updateUser",
     body: payload,
-  })
-  return response.data
-}
+  });
+  return response.data;
+};
 
 interface UserInfoResponse extends CommonResponse {
-  user: User
-  session_id: string
-  current_time: number
+  user: User;
+  session_id: string;
+  current_time: number;
 }
 
 /**
@@ -165,9 +204,9 @@ interface UserInfoResponse extends CommonResponse {
  */
 
 export const userInfo = async () => {
-  const response = await request<UserInfoResponse>({
-    method: 'GET',
-    url: 'usr/userInfo',
-  })
-  return response.data
-}
+  const response = await request<null, UserInfoResponse>({
+    method: "GET",
+    url: "usr/userInfo",
+  });
+  return response.data;
+};

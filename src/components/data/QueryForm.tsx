@@ -15,6 +15,8 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
+const HEIGHT = "35px";
+
 type QueryValueType = string | number | boolean | null | undefined;
 
 // 定义 QueryFormProps 类型
@@ -68,20 +70,27 @@ const QueryForm: React.FC<QueryFormProps> = ({
               onChange: (e: any) => {
                 handleChange(child.props.name, e.target.value);
               },
-              // 将内部 onChange 传递给子组件
               value: internalParams[child.props.name] || "", // 控制每个组件的值
             })}
           </Grid>
         ))}
       </Grid>
-      <Box
-        sx={{ marginTop: 2, display: "flex", justifyContent: "space-between" }}
-      >
+      <Box sx={{ marginTop: 2, display: "flex", gap: 2 }}>
         {/* 查询和重置按钮 */}
-        <Button variant="contained" color="primary" onClick={handleSearch}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSearch}
+          size="small"
+        >
           {searchButtonText}
         </Button>
-        <Button variant="outlined" color="secondary" onClick={handleReset}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={handleReset}
+          size="small"
+        >
           {resetButtonText}
         </Button>
       </Box>
@@ -90,24 +99,48 @@ const QueryForm: React.FC<QueryFormProps> = ({
 };
 
 // 自定义查询组件示例（例如：TextField、Select 等）是否需要
-const QueryTextField = ({ label, value, onChange, name }: any) => {
+const QueryTextField = ({
+  label,
+  value,
+  onChange,
+  name,
+  width,
+  height = HEIGHT,
+}: any) => {
   return (
-    <TextField
-      label={label}
-      value={value}
-      onChange={onChange}
-      name={name}
-      variant="outlined"
-      fullWidth
-    />
+    <FormControl fullWidth sx={{ width: width || "100%", height }}>
+      <TextField
+        label={label}
+        value={value}
+        onChange={onChange}
+        name={name}
+        variant="outlined"
+        fullWidth
+        sx={{ height, "& .MuiInputBase-root": { height } }} // 统一控制高度
+      />
+    </FormControl>
   );
 };
 
-const QuerySelect = ({ label, value, onChange, name, options, width }: any) => {
+const QuerySelect = ({
+  label,
+  value,
+  onChange,
+  name,
+  options,
+  width,
+  height = HEIGHT,
+}: any) => {
   return (
-    <FormControl fullWidth sx={{ width: width || "100%" }}>
+    <FormControl fullWidth sx={{ width: width || "100%", height }}>
       <InputLabel>{label}</InputLabel>
-      <Select label={label} value={value} onChange={onChange} name={name}>
+      <Select
+        label={label}
+        value={value}
+        onChange={onChange}
+        name={name}
+        sx={{ height, "& .MuiSelect-select": { height } }} // 统一控制高度
+      >
         {options.map((option: string, idx: number) => (
           <MenuItem key={idx} value={option}>
             {option}
@@ -118,7 +151,13 @@ const QuerySelect = ({ label, value, onChange, name, options, width }: any) => {
   );
 };
 
-const QueryDateTime = ({ label, value, onChange, name }: any) => {
+const QueryDateTime = ({
+  label,
+  value,
+  onChange,
+  name,
+  height = HEIGHT,
+}: any) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
@@ -127,9 +166,9 @@ const QueryDateTime = ({ label, value, onChange, name }: any) => {
         value={value ? dayjs(value) : null}
         onChange={(newValue) => {
           console.log(newValue);
-          // onChange(newValue);
           onChange({ target: { value: newValue?.valueOf() } });
         }}
+        sx={{ height, "& .MuiInputBase-root": { height } }} // 统一控制高度
       />
     </LocalizationProvider>
   );

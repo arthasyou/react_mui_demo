@@ -1,5 +1,6 @@
 import Home from "@/pages/Home";
 import About from "@/pages/About";
+import Login from "@/pages/Login";
 
 export interface RouteConfig {
   path: string;
@@ -12,6 +13,10 @@ export const routes: RouteConfig[] = [
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/about",

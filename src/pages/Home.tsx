@@ -1,7 +1,6 @@
 // import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import Button from "@mui/material/Button";
-import { CssBaseline, TextField, Typography } from "@mui/material";
+
+import { CssBaseline, Typography } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
@@ -36,13 +35,6 @@ const columns: GridColDef[] = [
 
 // 主页组件
 const Home = () => {
-  const { t, i18n } = useTranslation();
-
-  // 更新语言
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
-
   // 使用 queryParams 存储查询参数
   const [queryParams, updateQueryParams] = useQueryParams({
     type: "123",
@@ -76,38 +68,19 @@ const Home = () => {
     <div>
       <CssBaseline />
       <Typography variant="h5">Home</Typography>
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <h1>{t("welcome")}</h1>
-        <p>{t("description")}</p>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => changeLanguage("en")}
-          style={{ marginRight: "10px" }}
-        >
-          English
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => changeLanguage("zhCN")}
-        >
-          中文
-        </Button>
-
+      <div style={{ textAlign: "center", marginTop: "10px" }}>
         {/* 查询表单组件 */}
         <QueryForm onSearch={handleSearch} queryParams={queryParams}>
-          <TextField
+          <QueryTextField
             label="type"
             name="type"
             value={queryParams.type || ""}
-            // onChange={() => {}}
+            width={100}
           />
           <QueryTextField
             label="Last Name"
             name="lastName"
             value={queryParams.lastName || ""}
-            onChange={() => {}}
           />
           <QuerySelect
             label="Age"

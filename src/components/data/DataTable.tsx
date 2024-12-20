@@ -58,7 +58,7 @@ export default function DataTable<T extends GridValidRowModel>({
   }, [page, pageSize, loadData]); // 添加 queryParams 到依赖数组
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <Box sx={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
