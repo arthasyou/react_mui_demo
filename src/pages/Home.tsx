@@ -1,7 +1,7 @@
 // import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
-import { CssBaseline, Typography } from "@mui/material";
+import { CssBaseline, TextField, Typography } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
@@ -9,6 +9,7 @@ import {
   QueryForm,
   QueryTextField,
   QuerySelect,
+  QueryDateTime,
 } from "@/components/data/QueryForm"; // 引入 QueryForm 组件
 import { useQueryParams, QueryParamsType } from "@/hook/useQeuryParams";
 
@@ -47,6 +48,7 @@ const Home = () => {
     type: "123",
     lastName: "234",
     age: "10",
+    time: 1734152314000,
   });
 
   // 动态更新的数据获取函数
@@ -95,11 +97,11 @@ const Home = () => {
 
         {/* 查询表单组件 */}
         <QueryForm onSearch={handleSearch} queryParams={queryParams}>
-          <QueryTextField
+          <TextField
             label="type"
             name="type"
             value={queryParams.type || ""}
-            onChange={() => {}}
+            // onChange={() => {}}
           />
           <QueryTextField
             label="Last Name"
@@ -111,9 +113,13 @@ const Home = () => {
             label="Age"
             name="age"
             value={queryParams.age || ""}
-            onChange={() => {}}
             options={["10", "20", "30", "40"]} // 示例选项
             width="200px"
+          />
+          <QueryDateTime
+            label="创建时间"
+            name="time"
+            value={queryParams.time}
           />
         </QueryForm>
 

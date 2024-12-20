@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
+import { QueryParamsType } from "@/hook/useQeuryParams";
 import {
   Box,
   Button,
@@ -10,10 +11,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { QueryParamsType } from "@/hook/useQeuryParams";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 
 type QueryValueType = string | number | boolean | null | undefined;
 
@@ -65,10 +62,8 @@ const QueryForm: React.FC<QueryFormProps> = ({
         {React.Children.map(children, (child: any) => (
           <Grid columnSpacing={{ xs: 12, sm: 6, md: 3 }}>
             {React.cloneElement(child, {
-              onChange: (e: any) => {
-                handleChange(child.props.name, e.target.value);
-              },
-              // 将内部 onChange 传递给子组件
+              onChange: (e: any) =>
+                handleChange(child.props.name, e.target.value), // 将内部 onChange 传递给子组件
               value: internalParams[child.props.name] || "", // 控制每个组件的值
             })}
           </Grid>
@@ -118,21 +113,18 @@ const QuerySelect = ({ label, value, onChange, name, options, width }: any) => {
   );
 };
 
-const QueryDateTime = ({ label, value, onChange, name }: any) => {
+const QueryDateTimePicker = ({ label, value, onChange, name }: any) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateTimePicker
-        name={name}
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DesktopDatePicker
         label={label}
-        value={value ? dayjs(value) : null}
-        onChange={(newValue) => {
-          console.log(newValue);
-          // onChange(newValue);
-          onChange({ target: { value: newValue?.valueOf() } });
-        }}
+        value={value}
+        onChange={(newValue) => onChange({ target: { value: newValue } })}
+        inputFormat="yyyy-MM-dd HH:mm"
+        renderInput={(params) => <TextField {...params} />}
       />
     </LocalizationProvider>
   );
 };
 
-export { QueryForm, QueryTextField, QuerySelect, QueryDateTime };
+export { QueryForm, QueryTextField, QuerySelect, QueryDateTimePicker };

@@ -1,10 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import { enUS, zhCN } from "@mui/material/locale";
 import type { Localization } from "@mui/material/locale";
-import {
-  enUS as pickerEnUs,
-  zhCN as pickerZhCN,
-} from "@mui/x-date-pickers/locales";
 
 // 动态生成主题
 export const getTheme = (locale: Localization) =>
@@ -34,8 +30,7 @@ export const getTheme = (locale: Localization) =>
         },
       },
     },
-    locale,
-    locale === enUS ? pickerEnUs : pickerZhCN
+    locale // 动态语言配置
   );
 
 // 导出 Material-UI 的语言包
