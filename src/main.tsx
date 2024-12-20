@@ -1,6 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router";
+import { BrowserRouter } from "react-router"; // 修正导入 BrowserRouter 的路径
+import { Provider } from "react-redux"; // 引入 Redux Provider
+import store from "@/stores/store"; // 引入 Redux Store
+
 import "@/i18n/i18n"; // 引入 i18n 配置文件
 import "./index.css";
 import "@fontsource/roboto/300.css";
@@ -12,8 +15,12 @@ import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Provider store={store}>
+      {" "}
+      {/* 包裹 Redux Provider */}
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </StrictMode>
 );

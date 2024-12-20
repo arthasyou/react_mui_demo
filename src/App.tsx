@@ -1,47 +1,20 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router"; // 使用路由进行跳转
-import { routes, type RouteConfig } from "./routes"; // 导入路由配置
-import { getTheme, locales } from "@/theme"; // 导入动态主题和语言包
-import { useTranslation } from "react-i18next"; // 导入 i18n 国际化功能
-import { ThemeProvider, CssBaseline } from "@mui/material"; // 导入 MUI 组件
+import { Routes, useNavigate } from "react-router";
+import { renderRoutes, useDynamicRouter } from "./routes";
+import { getTheme, locales } from "@/theme";
+import { useTranslation } from "react-i18next";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 
 import Box from "@mui/material/Box";
-import AppBar from "./components/Appbar"; // 导入自定义的 AppBar
-import Navbar from "./components/nav/Navbar"; // 导入自定义的 Navbar
-import { DrawerHeader } from "./components/Header"; // 导入自定义的 DrawerHeader
-import Login from "./pages/Login"; // 导入 Login 页面组件
-import { userInfo } from "./api/userApi"; // 导入获取用户信息的接口
-import { Role } from "./hook/permission";
-import NoAccessPage from "./pages/NoAccesPage";
+import AppBar from "./components/Appbar";
+import Navbar from "./components/nav/Navbar";
+import { DrawerHeader } from "./components/Header";
+import Login from "./pages/Login";
+import { userInfo } from "./api/userApi";
+
+const currentRole = "root";
 
 // 递归渲染路由函数
-const renderRoutes = (
-  routesList: RouteConfig[],
-  currentRole: Role
-): React.ReactNode => {
-  return routesList.map((route: RouteConfig, index: number) => {
-    const hasPermission = route.allowedRoles
-      ? route.allowedRoles.includes(currentRole)
-      : true; // 如果没有指定权限，默认允许访问
-
-    return (
-      <Route
-        key={index}
-        path={route.path}
-        element={
-          hasPermission ? (
-            route.element
-          ) : (
-            <NoAccessPage /> // 如果没有权限，跳转到没有权限页面
-          )
-        }
-      >
-        {route.children && renderRoutes(route.children, currentRole)}{" "}
-        {/* 递归渲染子路由 */}
-      </Route>
-    );
-  });
-};
 
 const App: React.FC = () => {
   const { i18n } = useTranslation(); // 获取国际化功能
@@ -88,35 +61,25 @@ const App: React.FC = () => {
   // 登录成功后的回调
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
-    navigate("/"); // 跳转到主页面，假设主页面是 /dashboard
+    navigate("/");
   };
+
+  const routes = useDynamicRouter();
 
   return (
     <ThemeProvider theme={theme}>
-      {" "}
-      {/* 提供主题 */}
       <Suspense fallback="Loading...">
-        {" "}
-        {/* 处理懒加载，显示加载中状态 */}
-        {isLoggedIn ? ( // 如果已登录，渲染主页面
+        {isLoggedIn ? (
           <Box sx={{ display: "flex" }}>
-            <CssBaseline /> {/* 全局样式重置 */}
-            <AppBar open={open} handleDrawerOpen={handleDrawerOpen} />{" "}
-            {/* 渲染 AppBar */}
-            <Navbar
-              open={open}
-              handleDrawerClose={handleDrawerClose}
-              currentRole="user"
-            />{" "}
-            {/* 渲染 Navbar */}
+            <CssBaseline />
+            <AppBar open={open} handleDrawerOpen={handleDrawerOpen} />
+            <Navbar open={open} handleDrawerClose={handleDrawerClose} />
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-              <DrawerHeader /> {/* 渲染 DrawerHeader */}
-              {/* 渲染路由配置 */}
-              <Routes>{renderRoutes(routes, "user")}</Routes>
+              <DrawerHeader />
+              <Routes>{renderRoutes(routes, currentRole)}</Routes>
             </Box>
           </Box>
         ) : (
-          // 如果未登录，渲染 Login 页面
           <Login onLoginSuccess={handleLoginSuccess} />
         )}
       </Suspense>
