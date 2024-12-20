@@ -8,7 +8,7 @@ import { DrawerHeader } from "../Header";
 import DrawerList from "./DrawerList";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { Role } from "@/hook/permission";
+import { permission, Role } from "@/hook/permission";
 
 const drawerWidth = 240;
 
@@ -55,25 +55,25 @@ const items = [
     text: "Inbox",
     icon: <InboxIcon />,
     url: "/",
-    permission: ["root", "admin", "user"] as Role[],
+    permission: permission.home,
     children: [
       {
         text: "Starred",
         icon: <MailIcon />,
         url: "/about",
-        permission: ["root", "user"] as Role[],
+        permission: permission.about,
       },
       {
         text: "Drafts",
         icon: <MailIcon />,
         url: "/about",
-        permission: ["root", "admin"] as Role[],
+        permission: permission.home,
         children: [
           {
             text: "Archived",
             icon: <MailIcon />,
             url: "/about",
-            permission: ["root"] as Role[],
+            permission: permission.home,
           },
         ],
       },
@@ -83,7 +83,7 @@ const items = [
     text: "Sent mail",
     icon: <MailIcon />,
     url: "/",
-    permission: ["root"] as Role[],
+    permission: permission.home,
   },
 ];
 

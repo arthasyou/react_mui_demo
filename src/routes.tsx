@@ -1,7 +1,7 @@
 import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Login from "@/pages/Login";
-import { Role } from "./hook/permission";
+import { permission, Role } from "@/hook/permission";
 
 export interface RouteConfig {
   path: string;
@@ -15,7 +15,7 @@ export const routes: RouteConfig[] = [
   {
     path: "/",
     element: <Home />,
-    allowedRoles: ["root", "admin", "user"], // 所有角色都能访问
+    allowedRoles: permission.home, // 所有角色都能访问
   },
   {
     path: "/login",
@@ -24,6 +24,6 @@ export const routes: RouteConfig[] = [
   {
     path: "/about",
     element: <About />,
-    allowedRoles: ["root", "admin"], // 只有 root 和 admin 可以访问
+    allowedRoles: permission.about,
   },
 ];
