@@ -4,7 +4,7 @@ import { CssBaseline } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
-import useQueryParams from "@/hook/useQeuryParams";
+import { useQueryParams } from "@/hook/useQeuryParams";
 
 // 传入示例数据
 const columns: GridColDef[] = [

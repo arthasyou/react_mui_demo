@@ -77,15 +77,13 @@ const DrawerList: React.FC<DrawerListProps> = ({ items, open }) => {
             <ListItem key={itemIndex} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
-                  minHeight: 48,
+                  minHeight: 20,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
-                  pl: open ? level * 4 + 2 : 2, // 当Drawer打开时有缩进，关闭时左侧保持2px的间距
-                  // 高亮选中项，使用 theme.palette.primary.main
+                  pl: open ? level * 3 + 2 : 2, // 当Drawer打开时有缩进，关闭时左侧保持2px的间距
                   backgroundColor: isSelected
                     ? theme.palette.action.selected
                     : "transparent",
-                  // color: theme.palette.primary.main,
                   color: isSelected
                     ? theme.palette.primary.main
                     : theme.palette.text.primary,

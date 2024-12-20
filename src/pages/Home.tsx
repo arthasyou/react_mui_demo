@@ -1,7 +1,7 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Typography } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
@@ -10,7 +10,7 @@ import {
   QueryTextField,
   QuerySelect,
 } from "@/components/data/QueryForm"; // 引入 QueryForm 组件
-import { QueryParamsType } from "@/hook/useQeuryParams";
+import { useQueryParams, QueryParamsType } from "@/hook/useQeuryParams";
 
 // 示例数据的列定义
 const columns: GridColDef[] = [
@@ -43,12 +43,11 @@ const Home = () => {
   };
 
   // 使用 queryParams 存储查询参数
-  const [queryParams, setQueryParams] = useState<QueryParamsType>({});
-
-  // 更新查询参数函数
-  const updateQueryParams = (newParams: QueryParamsType) => {
-    setQueryParams((prevParams) => ({ ...prevParams, ...newParams }));
-  };
+  const [queryParams, updateQueryParams] = useQueryParams({
+    type: "123",
+    lastName: "234",
+    age: "10",
+  });
 
   // 动态更新的数据获取函数
   const fetchGameRecords = async (page: number, pageSize: number) => {
@@ -57,6 +56,8 @@ const Home = () => {
       limit: pageSize, // 每页条数
       ...queryParams, // 将查询参数传递给 API
     };
+
+    // console.log(payload);
     const response = await getGameRecord(payload);
     return {
       rows: response.records, // 返回数据记录
@@ -72,7 +73,7 @@ const Home = () => {
   return (
     <div>
       <CssBaseline />
-      <div>Home</div>
+      <Typography variant="h5">Home</Typography>
       <div style={{ textAlign: "center", marginTop: "50px" }}>
         <h1>{t("welcome")}</h1>
         <p>{t("description")}</p>
@@ -93,7 +94,7 @@ const Home = () => {
         </Button>
 
         {/* 查询表单组件 */}
-        <QueryForm onSearch={handleSearch}>
+        <QueryForm onSearch={handleSearch} queryParams={queryParams}>
           <QueryTextField
             label="type"
             name="type"

@@ -6,7 +6,7 @@ export type QueryParamsType = Record<
   string | number | boolean | null | undefined
 >;
 
-const useQueryParams = <T extends QueryParamsType>(
+export const useQueryParams = <T extends QueryParamsType>(
   initialParams: T = {} as T
 ) => {
   const [queryParams, setQueryParams] = useState<T>(initialParams);
@@ -15,7 +15,7 @@ const useQueryParams = <T extends QueryParamsType>(
     setQueryParams((prevParams: T) => {
       const updatedParams = { ...prevParams };
       for (const [key, value] of Object.entries(newParams)) {
-        if (value === null || value === undefined) {
+        if (value === null || value === undefined || value === "") {
           delete updatedParams[key];
         } else {
           updatedParams[key as keyof T] = value;
@@ -27,5 +27,3 @@ const useQueryParams = <T extends QueryParamsType>(
 
   return [queryParams, updateQueryParams] as const;
 };
-
-export default useQueryParams;

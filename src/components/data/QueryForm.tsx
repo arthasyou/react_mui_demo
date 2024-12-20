@@ -16,22 +16,25 @@ type QueryValueType = string | number | boolean | null | undefined;
 
 // 定义 QueryFormProps 类型
 interface QueryFormProps {
-  onSearch: (queryParams: QueryParamsType) => void; // 查询触发函数，传递查询参数
-  children: React.ReactNode; // 用于自定义输入内容的组件，可以是 TextField、Select 等
-  searchButtonText?: string; // 自定义查询按钮文本
-  resetButtonText?: string; // 自定义重置按钮文本
-  onReset?: () => void; // 自定义重置事件
+  onSearch: (queryParams: QueryParamsType) => void;
+  children: React.ReactNode;
+  searchButtonText?: string;
+  resetButtonText?: string;
+  onReset?: () => void;
+  queryParams?: QueryParamsType;
 }
 
 const QueryForm: React.FC<QueryFormProps> = ({
   onSearch,
   children,
-  searchButtonText = "查询", // 默认查询按钮文本
-  resetButtonText = "重置", // 默认重置按钮文本
-  onReset, // 重置事件
+  searchButtonText = "查询",
+  resetButtonText = "重置",
+  onReset,
+  queryParams = {},
 }) => {
   // 维护内部查询参数状态
-  const [internalParams, setInternalParams] = useState<QueryParamsType>({});
+  const [internalParams, setInternalParams] =
+    useState<QueryParamsType>(queryParams);
 
   // 查询表单的提交函数
   const handleSearch = () => {
@@ -81,7 +84,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
   );
 };
 
-// 自定义查询组件示例（例如：TextField、Select 等）
+// 自定义查询组件示例（例如：TextField、Select 等）是否需要
 const QueryTextField = ({ label, value, onChange, name }: any) => {
   return (
     <TextField
