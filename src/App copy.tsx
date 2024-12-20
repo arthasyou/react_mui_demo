@@ -11,36 +11,14 @@ import Navbar from "./components/nav/Navbar"; // 导入自定义的 Navbar
 import { DrawerHeader } from "./components/Header"; // 导入自定义的 DrawerHeader
 import Login from "./pages/Login"; // 导入 Login 页面组件
 import { userInfo } from "./api/userApi"; // 导入获取用户信息的接口
-import { Role } from "./hook/permission";
-import NoAccessPage from "./pages/NoAccesPage";
 
 // 递归渲染路由函数
-const renderRoutes = (
-  routesList: RouteConfig[],
-  currentRole: Role
-): React.ReactNode => {
-  return routesList.map((route: RouteConfig, index: number) => {
-    const hasPermission = route.allowedRoles
-      ? route.allowedRoles.includes(currentRole)
-      : true; // 如果没有指定权限，默认允许访问
-
-    return (
-      <Route
-        key={index}
-        path={route.path}
-        element={
-          hasPermission ? (
-            route.element
-          ) : (
-            <NoAccessPage /> // 如果没有权限，跳转到没有权限页面
-          )
-        }
-      >
-        {route.children && renderRoutes(route.children, currentRole)}{" "}
-        {/* 递归渲染子路由 */}
-      </Route>
-    );
-  });
+const renderRoutes = (routesList: RouteConfig[]): React.ReactNode => {
+  return routesList.map((route: RouteConfig, index: number) => (
+    <Route key={index} path={route.path} element={route.element}>
+      {route.children && renderRoutes(route.children)} {/* 递归渲染子路由 */}
+    </Route>
+  ));
 };
 
 const App: React.FC = () => {
@@ -112,7 +90,7 @@ const App: React.FC = () => {
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
               <DrawerHeader /> {/* 渲染 DrawerHeader */}
               {/* 渲染路由配置 */}
-              <Routes>{renderRoutes(routes, "user")}</Routes>
+              <Routes>{renderRoutes(routes)}</Routes>
             </Box>
           </Box>
         ) : (

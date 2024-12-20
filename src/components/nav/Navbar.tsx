@@ -8,6 +8,7 @@ import { DrawerHeader } from "../Header";
 import DrawerList from "./DrawerList";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import { Role } from "@/hook/permission";
 
 const drawerWidth = 240;
 
@@ -54,21 +55,25 @@ const items = [
     text: "Inbox",
     icon: <InboxIcon />,
     url: "/",
+    permission: ["root", "admin", "user"] as Role[],
     children: [
       {
         text: "Starred",
         icon: <MailIcon />,
         url: "/about",
+        permission: ["root", "user"] as Role[],
       },
       {
         text: "Drafts",
         icon: <MailIcon />,
         url: "/about",
+        permission: ["root", "admin"] as Role[],
         children: [
           {
             text: "Archived",
             icon: <MailIcon />,
             url: "/about",
+            permission: ["root"] as Role[],
           },
         ],
       },
@@ -78,15 +83,18 @@ const items = [
     text: "Sent mail",
     icon: <MailIcon />,
     url: "/",
+    permission: ["root"] as Role[],
   },
 ];
 
 export default function Navbar({
   open,
   handleDrawerClose,
+  currentRole,
 }: {
   open: boolean;
   handleDrawerClose: () => void;
+  currentRole: Role;
 }) {
   const theme = useTheme();
 
@@ -102,7 +110,7 @@ export default function Navbar({
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <DrawerList items={items} open={open} />
+      <DrawerList items={items} open={open} currentRole={currentRole} />
     </Drawer>
   );
 }

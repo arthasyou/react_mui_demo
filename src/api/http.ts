@@ -6,13 +6,10 @@ import axios, {
 
 // 创建 Axios 实例
 const http: AxiosInstance = axios.create({
-  baseURL: "/api",
-  // baseURL: 'http://192.168.1.25:3837',
-  // baseURL: 'https://your-base-url.com/api', // 替换为你的 base URL
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  // withCredentials: true, // 允许携带 Cookie
 });
 
 // 请求拦截器

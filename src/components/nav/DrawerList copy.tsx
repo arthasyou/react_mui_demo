@@ -9,37 +9,32 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Collapse } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useTheme } from "@mui/material/styles";
-import { Role } from "@/hook/permission"; // 引入 Role 类型
+import { Role } from "@/hook/permission";
 
 interface DrawerListItem {
   text: string;
   icon: React.ReactNode;
   url: string;
-  permission: Role[]; // 定义权限
+  permission: Role[];
   children?: DrawerListItem[];
 }
 
 interface DrawerListProps {
-  items: DrawerListItem[]; // 菜单项列表
-  open: boolean; // Drawer 是否打开
-  currentRole: Role; // 当前用户的角色
+  items: DrawerListItem[];
+  open: boolean;
 }
 
-const DrawerList: React.FC<DrawerListProps> = ({
-  items,
-  open,
-  currentRole,
-}) => {
+const DrawerList: React.FC<DrawerListProps> = ({ items, open }) => {
   const [openChildren, setOpenChildren] = useState<{ [key: string]: boolean }>(
     {}
   );
+
+  // 用于记录选中的菜单项
   const [selectedIndex, setSelectedIndex] = useState<string>("");
 
   // 获取主题
   const theme = useTheme();
-  const navigate = useNavigate();
 
-  // 处理子菜单展开/收起
   const handleClick = (index: string) => {
     setOpenChildren((prev) => ({
       ...prev,
@@ -47,27 +42,26 @@ const DrawerList: React.FC<DrawerListProps> = ({
     }));
   };
 
-  // 处理菜单项点击
+  const navigate = useNavigate();
+
   const handleItemClick = (
     index: string,
     url?: string,
     children?: DrawerListItem[]
   ) => {
     if (children) {
+      // 如果有子菜单，则不进行跳转
       return;
     }
+
+    // 更新选中的菜单项
     setSelectedIndex(index);
+
     if (url) {
-      navigate(url); // 跳转到对应的 url
+      navigate(url); // 如果没有子菜单且有url，则跳转到对应的url
     }
   };
 
-  // 过滤菜单项：根据当前角色过滤
-  const filterItemsByRole = (items: DrawerListItem[]): DrawerListItem[] => {
-    return items.filter((item) => item.permission.includes(currentRole)); // 只显示当前角色有权限的菜单项
-  };
-
-  // 递归渲染菜单
   const renderList = (
     items: DrawerListItem[],
     parentIndex: string = "",
@@ -77,13 +71,9 @@ const DrawerList: React.FC<DrawerListProps> = ({
       <List>
         {items.map((item, index) => {
           const itemIndex = `${parentIndex}-${index}`;
+
           // 判断当前项是否为选中项
           const isSelected = selectedIndex === itemIndex;
-
-          // 如果当前项没有权限，跳过渲染
-          if (!item.permission.includes(currentRole)) {
-            return null;
-          }
 
           return (
             <ListItem key={itemIndex} disablePadding sx={{ display: "block" }}>
@@ -92,7 +82,7 @@ const DrawerList: React.FC<DrawerListProps> = ({
                   minHeight: 20,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
-                  pl: open ? level * 3 + 2 : 2,
+                  pl: open ? level * 3 + 2 : 2, // 当Drawer打开时有缩进，关闭时左侧保持2px的间距
                   backgroundColor: isSelected
                     ? theme.palette.action.selected
                     : "transparent",
@@ -102,9 +92,9 @@ const DrawerList: React.FC<DrawerListProps> = ({
                 }}
                 onClick={() => {
                   if (item.children) {
-                    handleClick(itemIndex); // 展开/收起子菜单
+                    handleClick(itemIndex); // 点击展开/收起子菜单
                   } else {
-                    handleItemClick(itemIndex, item.url, item.children); // 跳转
+                    handleItemClick(itemIndex, item.url, item.children); // 点击跳转
                   }
                 }}
               >
@@ -125,6 +115,7 @@ const DrawerList: React.FC<DrawerListProps> = ({
                   (openChildren[itemIndex] ? <ExpandLess /> : <ExpandMore />)}
               </ListItemButton>
 
+              {/* Collapse 区域：控制子项的展开和折叠 */}
               {item.children && openChildren[itemIndex] && (
                 <Collapse
                   in={openChildren[itemIndex]}
@@ -133,7 +124,7 @@ const DrawerList: React.FC<DrawerListProps> = ({
                 >
                   <List component="div" disablePadding>
                     {renderList(item.children, itemIndex, level + 1)}{" "}
-                    {/* 递归渲染子项 */}
+                    {/* 递归渲染子项并传递层级 */}
                   </List>
                 </Collapse>
               )}
@@ -144,9 +135,7 @@ const DrawerList: React.FC<DrawerListProps> = ({
     );
   };
 
-  const filteredItems = filterItemsByRole(items); // 根据权限过滤菜单项
-
-  return renderList(filteredItems); // 渲染过滤后的菜单项
+  return renderList(items);
 };
 
 export default DrawerList;
