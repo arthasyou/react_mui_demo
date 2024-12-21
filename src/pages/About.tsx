@@ -2,7 +2,7 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import PermissionPage from "@/components/common/permission/PermmisonPage";
+import Permission from "@/components/common/permission/Permission";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
@@ -67,7 +67,7 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <PermissionPage></PermissionPage>
+        <Permission></Permission>
         {/* 添加 TextField 和 Button */}
         <Box sx={{ mt: 2 }}>
           <TextField

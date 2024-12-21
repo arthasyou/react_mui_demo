@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
 import { TreeViewBaseItem } from "@mui/x-tree-view/models";
-import { permissionData } from "./permmissionData";
-import { Button, FormControl, TextField } from "@mui/material";
+import { permissionData } from "./permissionData";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 
 const height = "35px";
 
@@ -59,7 +59,11 @@ const isChild = (id: string, items: TreeViewBaseItem[]) => {
   return getParentId(id, items) !== null;
 };
 
-export default function PermissionPage() {
+interface PermissionProps {
+  onSubmit: () => void;
+}
+
+export default function PermissionLib({ onSubmit }: PermissionProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const handleSelectionChange = (
@@ -168,10 +172,12 @@ export default function PermissionPage() {
 
   const handleButtonClick = () => {
     console.log("selected:", JSON.stringify(selectedIds, null, 2));
+    onSubmit();
   };
 
   return (
-    <Box sx={{ minHeight: 352, minWidth: 290 }}>
+    <Box sx={{ p: 3, minHeight: 352, minWidth: 290 }}>
+      <Typography>权限管理</Typography>
       <Box sx={{ mt: 2, mb: 5, gap: 2, display: "flex", alignItems: "center" }}>
         <FormControl sx={{ height }}>
           <TextField
