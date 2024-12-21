@@ -5,6 +5,7 @@ import Login from "@/pages/Login";
 import { RootState } from "./stores/store";
 import { useSelector } from "react-redux";
 import { Route } from "react-router";
+import Welcome from "./pages/Welcome";
 
 export interface RouteConfig {
   name: string;
@@ -21,6 +22,11 @@ export const routes: RouteConfig[] = [
     element: <Home />,
   },
   {
+    name: "welcome",
+    path: "/welcome",
+    element: <Welcome />,
+  },
+  {
     name: "about",
     path: "/about",
     element: <About />,
@@ -32,14 +38,11 @@ export const routes: RouteConfig[] = [
   },
 ];
 
-export const renderRoutes = (
-  routesList: RouteConfig[],
-  currentRole: string
-): React.ReactNode => {
+export const renderRoutes = (routesList: RouteConfig[]): React.ReactNode => {
   return routesList.map((route: RouteConfig, index: number) => {
     return (
       <Route key={index} path={route.path} element={route.element}>
-        {route.children && renderRoutes(route.children, currentRole)}
+        {route.children && renderRoutes(route.children)}
       </Route>
     );
   });

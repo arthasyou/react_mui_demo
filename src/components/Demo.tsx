@@ -1,6 +1,4 @@
-// import { useState } from "react";
-
-import { CssBaseline, Typography } from "@mui/material";
+import { CssBaseline, Typography, Button } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
@@ -11,6 +9,7 @@ import {
   QueryDateTime,
 } from "@/components/data/QueryForm"; // 引入 QueryForm 组件
 import { useQueryParams, QueryParamsType } from "@/hook/useQeuryParams";
+import { useTranslation } from "react-i18next"; // 引入 useTranslation
 
 // 示例数据的列定义
 const columns: GridColDef[] = [
@@ -35,7 +34,7 @@ const columns: GridColDef[] = [
 
 // 主页组件
 const Home = () => {
-  // 使用 queryParams 存储查询参数
+  const { t, i18n } = useTranslation(); // 使用 i18n 和 t 函数
   const [queryParams, updateQueryParams] = useQueryParams({
     type: "123",
     lastName: "234",
@@ -51,7 +50,6 @@ const Home = () => {
       ...queryParams, // 将查询参数传递给 API
     };
 
-    // console.log(payload);
     const response = await getGameRecord(payload);
     return {
       rows: response.records, // 返回数据记录
@@ -64,33 +62,38 @@ const Home = () => {
     updateQueryParams(newParams); // 更新查询参数
   };
 
+  // 切换语言函数
+  const switchLanguage = (lang: "en" | "zh") => {
+    i18n.changeLanguage(lang); // 切换语言
+  };
+
   return (
     <div>
       <CssBaseline />
-      <Typography variant="h5">Home</Typography>
+      <Typography variant="h5">{t("home")}</Typography> {/* 动态渲染文本 */}
       <div style={{ textAlign: "center", marginTop: "10px" }}>
         {/* 查询表单组件 */}
         <QueryForm onSearch={handleSearch} queryParams={queryParams}>
           <QueryTextField
-            label="type"
+            label={t("type")}
             name="type"
             value={queryParams.type || ""}
             width={100}
           />
           <QueryTextField
-            label="Last Name"
+            label={t("lastName")}
             name="lastName"
             value={queryParams.lastName || ""}
           />
           <QuerySelect
-            label="Age"
+            label={t("age")}
             name="age"
             value={queryParams.age || ""}
             options={["10", "20", "30", "40"]} // 示例选项
             width="200px"
           />
           <QueryDateTime
-            label="创建时间"
+            label={t("createTime")}
             name="time"
             value={queryParams.time}
           />
@@ -101,6 +104,20 @@ const Home = () => {
           fetchData={fetchGameRecords} // 将 fetchGameRecords 传递给 DataTable
           getRowIdKey="tid"
         />
+
+        {/* 语言切换按钮 */}
+        <div style={{ marginTop: "20px" }}>
+          <Button onClick={() => switchLanguage("en")} variant="outlined">
+            English
+          </Button>
+          <Button
+            onClick={() => switchLanguage("zh")}
+            variant="outlined"
+            style={{ marginLeft: "10px" }}
+          >
+            中文
+          </Button>
+        </div>
       </div>
     </div>
   );
