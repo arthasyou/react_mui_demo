@@ -17,6 +17,7 @@ const initialState: PermissionState = {
     home: ["admin", "user"],
     about: ["admin"],
     login: ["admin", "user"],
+    // welcome: ["user"],
     Inbox: ["admin", "user"],
     Starred: ["admin"],
     Archived: ["user"],

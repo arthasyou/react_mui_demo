@@ -3,6 +3,9 @@ import Box from "@mui/material/Box";
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
 import { TreeViewBaseItem } from "@mui/x-tree-view/models";
 import { permissionData } from "./permmissionData";
+import { Button, FormControl, TextField } from "@mui/material";
+
+const height = "35px";
 
 const getAllChildIds = (items: TreeViewBaseItem[]): string[] => {
   return items.flatMap((child) => [
@@ -158,8 +161,37 @@ export default function PermissionPage() {
     setSelectedIds(Array.from(selectedSet));
   };
 
+  const [groupName, setGroupName] = React.useState("");
+  const handleGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGroupName(event.target.value);
+  };
+
+  const handleButtonClick = () => {
+    console.log("selected:", JSON.stringify(selectedIds, null, 2));
+  };
+
   return (
     <Box sx={{ minHeight: 352, minWidth: 290 }}>
+      <Box sx={{ mt: 2, mb: 5, gap: 2, display: "flex", alignItems: "center" }}>
+        <FormControl sx={{ height }}>
+          <TextField
+            label="Group Name"
+            variant="standard"
+            value={groupName}
+            onChange={handleGroupChange}
+          />
+        </FormControl>
+        <FormControl sx={{ height }}>
+          <Button
+            variant="contained"
+            sx={{ mt: 2, ml: 1 }}
+            onClick={handleButtonClick}
+            size="small"
+          >
+            Submit
+          </Button>
+        </FormControl>
+      </Box>
       <RichTreeView
         multiSelect
         checkboxSelection
@@ -167,10 +199,6 @@ export default function PermissionPage() {
         selectedItems={selectedIds}
         onSelectedItemsChange={handleSelectionChange}
       />
-      <div>
-        <strong>选中的项:</strong>
-        <pre>{JSON.stringify(selectedIds, null, 2)}</pre>
-      </div>
     </Box>
   );
 }

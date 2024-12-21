@@ -14,7 +14,7 @@ export default defineConfig(() => {
     server: {
       proxy: {
         "/api": {
-          target: "https://sx.valleyexc.cc",
+          target: "https://ag.valleyexc.cc",
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ""),
           ws: true,

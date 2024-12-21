@@ -51,7 +51,7 @@ export const useMenu = (): MenuItem[] => {
       menu
         // 过滤掉没有权限的菜单项
         .filter((item) =>
-          permissionGroups[item.name].some((role) => roles.includes(role))
+          permissionGroups[item.name]?.some((role) => roles.includes(role))
         )
         .map((item) => {
           // 递归处理子菜单

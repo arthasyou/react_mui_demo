@@ -1,34 +1,30 @@
 import { useState } from "react";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
-import { login } from "@/api/userApi"; // 引入 login API
+
+import { login } from "@/api/userApi";
+import ErrorTip from "@/components/common/ErrorTip";
 
 interface LoginPageProps {
-  onLoginSuccess?: () => void; // 父组件传入的回调函数
+  onLoginSuccess?: () => void;
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
-  const [username, setUsername] = useState(""); // 用户名
-  const [password, setPassword] = useState(""); // 密码
-  const [error, setError] = useState(""); // 错误信息
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-
-    // 登录逻辑：这里简单的验证密码是否为空
     if (!password) {
       setError("请输入密码");
       return;
     }
 
     try {
-      // 调用登录 API
       const response = await login({ username, password });
       if (response.code === 0) {
-        // 登录成功，触发父组件的回调函数
-        setError(""); // 清除错误信息
-        if (onLoginSuccess) {
-          onLoginSuccess();
-        }
+        setError("");
+        if (onLoginSuccess) onLoginSuccess();
       } else {
         setError("登录失败，请检查用户名和密码");
       }
@@ -58,12 +54,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             width: "100%",
           }}
         >
-          {/* 显示错误信息 */}
-          {error && (
-            <Typography color="error" variant="body2" sx={{ mb: 2 }}>
-              {error}
-            </Typography>
-          )}
+          {/* 使用 ErrorMessage 组件 */}
+          <ErrorTip message={error} visible={!!error} />
 
           <TextField
             label="用户名"

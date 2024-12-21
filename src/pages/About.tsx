@@ -2,6 +2,9 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import PermissionPage from "@/components/common/permission/PermmisonPage";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -34,9 +37,20 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
+  const [textFieldValue, setTextFieldValue] = React.useState("");
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleTextFieldChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setTextFieldValue(event.target.value);
+  };
+
+  const handleButtonClick = () => {
+    console.log("Text Field Value:", textFieldValue);
   };
 
   return (
@@ -53,7 +67,24 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Item One
+        <PermissionPage></PermissionPage>
+        {/* 添加 TextField 和 Button */}
+        <Box sx={{ mt: 2 }}>
+          <TextField
+            label="Enter something"
+            variant="outlined"
+            fullWidth
+            value={textFieldValue}
+            onChange={handleTextFieldChange}
+          />
+          <Button
+            variant="contained"
+            sx={{ mt: 2, ml: 1 }}
+            onClick={handleButtonClick}
+          >
+            Submit
+          </Button>
+        </Box>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Item Two
