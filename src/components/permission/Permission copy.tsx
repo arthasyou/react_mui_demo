@@ -1,7 +1,7 @@
 import * as React from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
-import PermissionLib from "./PermsisonLib";
+import PermissionLib from "./PermissionLib";
 
 export default function Permission() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(

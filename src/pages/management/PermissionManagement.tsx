@@ -40,6 +40,10 @@ const PermissionManagement = () => {
     }
   };
 
+  const handleSubmit = async (data: string[]) => {
+    console.log("page: ", data);
+  };
+
   // 示例数据的列定义
   const columns: GridColDef[] = [
     { field: "sn", headerName: t("sn"), width: 200 },
@@ -65,6 +69,7 @@ const PermissionManagement = () => {
                 </Button>
               }
               initialSeleted={initialIds}
+              onSubmit={handleSubmit}
             ></Permission>
           </div>
         );

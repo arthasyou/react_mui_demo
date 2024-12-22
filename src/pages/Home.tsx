@@ -9,7 +9,7 @@ import {
   QueryTextField,
   QuerySelect,
   QueryDateTime,
-} from "@/components/data/QueryForm"; // 引入 QueryForm 组件
+} from "@/components/data/QueryForm";
 import { useQueryParams, QueryParamsType } from "@/hook/useQeuryParams";
 import { useCallback } from "react";
 

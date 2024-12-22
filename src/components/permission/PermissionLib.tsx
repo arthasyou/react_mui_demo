@@ -60,7 +60,7 @@ const isChild = (id: string, items: TreeViewBaseItem[]) => {
 };
 
 interface PermissionProps {
-  onSubmit: () => void;
+  onSubmit: (selectedIds: string[]) => void;
   initialSeleted?: string[];
 }
 
@@ -175,8 +175,7 @@ export default function PermissionLib({
   };
 
   const handleButtonClick = () => {
-    console.log("selected:", JSON.stringify(selectedIds, null, 2));
-    onSubmit();
+    onSubmit(selectedIds); // 将 selectedIds 传递给 onSubmit
   };
 
   return (

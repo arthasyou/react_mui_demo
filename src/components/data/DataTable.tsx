@@ -5,7 +5,7 @@ import {
   GridRowsProp,
   GridValidRowModel,
 } from "@mui/x-data-grid";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 // 定义 API 函数返回的数据格式
 interface PaginatedData<T> {
@@ -30,8 +30,6 @@ export default function DataTable<T extends GridValidRowModel>({
   const [totalCount, setTotalCount] = useState(0); // 总数据量
   const [loading, setLoading] = useState(false); // 加载状态
 
-  const isFirstRender = useRef(true);
-
   // 使用 useCallback 来稳定 loadData 的引用
   const loadData = useCallback(
     async (page: number, pageSize: number) => {
@@ -50,12 +48,6 @@ export default function DataTable<T extends GridValidRowModel>({
   );
 
   useEffect(() => {
-    console.log("useEffect triggered", { loadData });
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return; // 不调用 loadData，防止初始化时触发多次 API 请求
-    }
-
     loadData(page, pageSize); // 初始加载数据时传递查询参数
   }, [page, pageSize, loadData]); // 添加 queryParams 到依赖数组
 

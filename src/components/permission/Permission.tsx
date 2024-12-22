@@ -5,11 +5,13 @@ import PermissionLib from "./PermissionLib";
 interface PermissionProps {
   triggerButton: React.ReactNode; // 外部传入的触发按钮（带样式和内容）
   initialSeleted: string[];
+  onSubmit: (data: string[]) => void; // 添加 onClose 回调函数
 }
 
 const Permission: React.FC<PermissionProps> = ({
   triggerButton,
   initialSeleted,
+  onSubmit,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -17,12 +19,17 @@ const Permission: React.FC<PermissionProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleSubmit = (data: string[]) => {
+    onSubmit(data);
     setAnchorEl(null);
   };
 
+  const handleClose = () => {
+    console.log("permission-popover closed");
+  };
+
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? "permission-popover" : undefined;
 
   return (
     <div>
@@ -38,7 +45,10 @@ const Permission: React.FC<PermissionProps> = ({
           horizontal: "left",
         }}
       >
-        <PermissionLib onSubmit={handleClose} initialSeleted={initialSeleted} />
+        <PermissionLib
+          onSubmit={handleSubmit}
+          initialSeleted={initialSeleted}
+        />
       </Popover>
     </div>
   );
