@@ -12,6 +12,7 @@ import {
   EditIconButton,
   DeleteIconButton,
 } from "@/components/common/iconButton";
+import Toolbar from "@/components/common/Toolbar";
 
 // 主页组件
 const PermissionManagement = () => {
@@ -83,17 +84,19 @@ const PermissionManagement = () => {
   // onClick={() => handelDelete(params.row.tid)}
 
   return (
-    <div>
+    <Box sx={{ width: "100%", height: "100%" }}>
       <CssBaseline />
       <Typography variant="h5">{t("menu.permission_management")}</Typography>
-      <div style={{ textAlign: "center", marginTop: "10px" }}>
+      <Toolbar></Toolbar>
+
+      <Box sx={{ width: "100%", height: "100%" }}>
         <DataTable
           columns={columns}
           fetchData={fetchData} // 将 fetchGameRecords 传递给 DataTable
           getRowIdKey="tid"
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

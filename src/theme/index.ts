@@ -6,6 +6,8 @@ import {
   zhCN as pickerZhCN,
 } from "@mui/x-date-pickers/locales";
 
+import { enUS as dataEnUS, zhCN as dataZhCN } from "@mui/x-data-grid/locales";
+
 // 动态生成主题
 export const getTheme = (locale: Localization) =>
   createTheme(
@@ -35,7 +37,8 @@ export const getTheme = (locale: Localization) =>
       },
     },
     locale,
-    locale === enUS ? pickerEnUs : pickerZhCN
+    locale === enUS ? pickerEnUs : pickerZhCN,
+    locale === enUS ? dataEnUS : dataZhCN
   );
 
 // 导出 Material-UI 的语言包

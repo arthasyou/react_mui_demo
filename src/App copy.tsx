@@ -65,13 +65,7 @@ const App: React.FC = () => {
             <Navbar open={open} handleDrawerClose={handleDrawerClose} />
             <Box
               component="main"
-              sx={{
-                flexGrow: 1,
-                p: 3,
-                overflow: "hidden",
-                width: "100%",
-                height: "100%",
-              }}
+              sx={{ flexGrow: 1, p: 3, width: "100%", height: "100%" }}
             >
               <DrawerHeader />
               <Routes>{renderRoutes(routes)}</Routes>

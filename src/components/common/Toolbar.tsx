@@ -1,4 +1,4 @@
-import { Box, Toolbar, Typography, Button } from "@mui/material";
+import { Box, Toolbar, Button } from "@mui/material";
 
 function CustomToolbar() {
   return (
@@ -8,10 +8,7 @@ function CustomToolbar() {
           justifyContent: "space-between",
         }}
       >
-        {/* 中间标题 */}
-        <Typography variant="h6" component="div">
-          工具栏标题
-        </Typography>
+        <Box></Box>
 
         {/* 右侧按钮 */}
         <Box
