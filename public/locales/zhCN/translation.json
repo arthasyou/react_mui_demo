@@ -1,15 +1,29 @@
 {
   "welcome": "欢迎使用 React",
-  "description": "这是一个 i18n 示例。",
+  "description": "这是一个 i18n 的示例。",
   "sn": "序号",
   "id": "编号",
   "name": "名称",
   "action": "操作",
+  "edit": "编辑",
+  "delete": "删除",
 
   "menu": {
     "home": "首页",
     "management": "管理",
     "permission_management": "权限管理",
-    "admin": "Admin"
+    "admin": "管理员"
+  },
+  "page": {
+    "home": {
+      "title": "首页",
+      "description": "这是首页。"
+    },
+    "management": {
+      "permission": {
+        "title": "权限",
+        "description": "这是权限页面。"
+      }
+    }
   }
 }

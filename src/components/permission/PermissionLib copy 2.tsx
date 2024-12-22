@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 
 const height = "35px";
 
-// Helper functions
 const getAllChildIds = (items: TreeViewBaseItem[]): string[] => {
   return items.flatMap((child) => [
     child.id,
@@ -61,92 +60,6 @@ const isChild = (id: string, items: TreeViewBaseItem[]) => {
   return getParentId(id, items) !== null;
 };
 
-const convertMenuToPermissionData = (
-  menu: MenuItem[],
-  t: (key: string) => string
-): TreeViewBaseItem[] => {
-  return menu.map((item) => ({
-    id: item.name,
-    label: t(item.label),
-    children: item.children
-      ? convertMenuToPermissionData(item.children, t)
-      : undefined,
-  }));
-};
-
-const processParentSelection = (
-  id: string,
-  children: TreeViewBaseItem[],
-  select: boolean,
-  selectedSet: Set<string>
-) => {
-  const childIds = getAllChildIds(children);
-  if (select) {
-    selectedSet.add(id);
-    childIds.forEach((childId) => {
-      selectedSet.add(childId);
-      const childNode = getCurrentNode(childId, children);
-      if (childNode && isParent(childNode)) {
-        processParentSelection(
-          childId,
-          childNode.children || [],
-          true,
-          selectedSet
-        );
-      }
-    });
-  } else {
-    selectedSet.delete(id);
-    childIds.forEach((childId) => {
-      selectedSet.delete(childId);
-      const childNode = getCurrentNode(childId, children);
-      if (childNode && isParent(childNode)) {
-        processParentSelection(
-          childId,
-          childNode.children || [],
-          false,
-          selectedSet
-        );
-      }
-    });
-  }
-};
-
-const processChildSelection = (
-  id: string,
-  select: boolean,
-  selectedSet: Set<string>,
-  permissionData: TreeViewBaseItem[]
-) => {
-  if (select) {
-    selectedSet.add(id);
-  } else {
-    selectedSet.delete(id);
-  }
-
-  const parent = getParent(id, permissionData);
-  if (!parent) return;
-
-  const parentId = parent.id;
-  const siblingIds = parent.children?.map((child) => child.id) || [];
-  const shouldSelectParent = siblingIds.some((siblingId) =>
-    selectedSet.has(siblingId)
-  );
-
-  if (shouldSelectParent) {
-    selectedSet.add(parentId);
-  } else {
-    selectedSet.delete(parentId);
-  }
-
-  processChildSelection(
-    parentId,
-    shouldSelectParent,
-    selectedSet,
-    permissionData
-  );
-};
-
 interface PermissionProps {
   onSubmit: (selectedIds: string[]) => void;
   initialSeleted?: string[];
@@ -157,59 +70,146 @@ export default function PermissionLib({
   initialSeleted = [],
 }: PermissionProps) {
   const { t } = useTranslation();
-  const permissionData = convertMenuToPermissionData(menu, t);
+
+  const convertMenuToPermissionData = (
+    menu: MenuItem[]
+  ): TreeViewBaseItem[] => {
+    return menu.map((item) => {
+      const convertedItem: TreeViewBaseItem = {
+        id: item.name,
+        label: t(item.label),
+        children: item.children
+          ? convertMenuToPermissionData(item.children)
+          : undefined,
+      };
+      return convertedItem;
+    });
+  };
+
+  const permissionData = convertMenuToPermissionData(menu);
+
   const [selectedIds, setSelectedIds] = useState<string[]>(initialSeleted);
-  const [groupName, setGroupName] = useState("");
 
   const handleSelectionChange = (
     _event: React.SyntheticEvent,
     newSelectedIds: string[]
   ) => {
+    // 1. 函数定义部分
     const currentClickedId =
       newSelectedIds.find((id) => !selectedIds.includes(id)) ||
       selectedIds.find((id) => !newSelectedIds.includes(id));
     if (!currentClickedId) return;
 
     const selectedSet = new Set<string>(selectedIds);
+
+    const processParentSelection = (
+      id: string,
+      children: TreeViewBaseItem[],
+      select: boolean
+    ) => {
+      const childIds = getAllChildIds(children);
+      if (select) {
+        selectedSet.add(id);
+        childIds.forEach((childId) => {
+          selectedSet.add(childId);
+          const childNode = getCurrentNode(childId, children);
+          if (childNode && isParent(childNode)) {
+            const subChildren = childNode.children || [];
+            processParentSelection(childId, subChildren, true); // 递归处理子节点
+          }
+        });
+      } else {
+        selectedSet.delete(id);
+        childIds.forEach((childId) => {
+          selectedSet.delete(childId);
+          const childNode = getCurrentNode(childId, children);
+          if (childNode && isParent(childNode)) {
+            const subChildren = childNode.children || [];
+            processParentSelection(childId, subChildren, false); // 递归处理子节点
+          }
+        });
+      }
+    };
+
+    const processChildSelection = (id: string, select: boolean) => {
+      if (select) {
+        selectedSet.add(id);
+      } else {
+        selectedSet.delete(id);
+      }
+
+      const parent = getParent(id, permissionData);
+      if (!parent) return;
+
+      const parentId = parent.id;
+
+      if (parentId) {
+        const siblingIds = parent?.children?.map((child) => child.id) || [];
+        // 如果有任何一个子节点被选中，则选中父节点
+        const shouldSelectParent = siblingIds.some((siblingId) =>
+          selectedSet.has(siblingId)
+        );
+
+        if (shouldSelectParent) {
+          selectedSet.add(parentId); // 任何子节点被选中时，选中父节点
+        } else {
+          selectedSet.delete(parentId); // 如果所有子节点都没有选中，则取消父节点选中
+        }
+
+        if (select) {
+          processChildSelection(parentId, true); // 递归处理上级节点
+        }
+
+        if (!shouldSelectParent) {
+          processChildSelection(parentId, false);
+        }
+      }
+    };
+
+    // 2. 函数调用部分
+    // 判断并处理当前选项的角色
+
     const currentNode = getCurrentNode(currentClickedId, permissionData);
+
     if (!currentNode) return;
 
     const isParentFlag = isParent(currentNode);
-    const isChildFlag = isChild(currentClickedId, permissionData);
-    const select = !selectedIds.includes(currentClickedId);
 
     if (isParentFlag) {
-      processParentSelection(
-        currentClickedId,
-        currentNode.children || [],
-        select,
-        selectedSet
-      );
+      const select = !selectedIds.includes(currentClickedId);
+      // 确保传入 processParentSelection 的第二个参数是一个数组
+      const children = currentNode.children || [];
+      processParentSelection(currentClickedId, children, select);
     }
 
-    if (isChildFlag || !(isParentFlag && isChildFlag)) {
-      processChildSelection(
-        currentClickedId,
-        select,
-        selectedSet,
-        permissionData
-      );
+    const isChildFlag = isChild(currentClickedId, permissionData);
+
+    if (isChildFlag) {
+      const select = !selectedIds.includes(currentClickedId);
+      processChildSelection(currentClickedId, select);
     }
 
+    if (!(isParentFlag && isChildFlag)) {
+      const select = !selectedIds.includes(currentClickedId);
+      processChildSelection(currentClickedId, select);
+    }
+
+    // 最终更新状态
     setSelectedIds(Array.from(selectedSet));
   };
 
+  const [groupName, setGroupName] = React.useState("");
   const handleGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGroupName(event.target.value);
   };
 
   const handleButtonClick = () => {
-    onSubmit(selectedIds);
+    onSubmit(selectedIds); // 将 selectedIds 传递给 onSubmit
   };
 
   return (
     <Box sx={{ p: 3, minHeight: 352, minWidth: 290 }}>
-      <Typography variant="h6">{t("menu.permission_management")}</Typography>
+      <Typography>权限管理</Typography>
       <Box sx={{ mt: 2, mb: 5, gap: 2, display: "flex", alignItems: "center" }}>
         <FormControl sx={{ height }}>
           <TextField

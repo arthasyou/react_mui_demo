@@ -14,7 +14,7 @@ export interface MenuItem {
 }
 
 // 静态菜单定义（基础结构，permission 不赋值）
-const menu: MenuItem[] = [
+export const menu: MenuItem[] = [
   {
     name: names.home,
     label: "menu.home",

@@ -25,7 +25,7 @@ const Permission: React.FC<PermissionProps> = ({
   };
 
   const handleClose = () => {
-    console.log("permission-popover closed");
+    setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);

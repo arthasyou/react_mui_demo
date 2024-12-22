@@ -1,7 +1,6 @@
 // import { useState } from "react";
 
-import { Button, CssBaseline, Typography } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import { Box, CssBaseline, Typography } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
@@ -9,6 +8,10 @@ import { useTranslation } from "react-i18next";
 import Permission from "@/components/permission/Permission";
 import { rowsWithSn } from "@/utils/tableUtils";
 import { useCallback, useState } from "react";
+import {
+  EditIconButton,
+  DeleteIconButton,
+} from "@/components/common/iconButton";
 
 // 主页组件
 const PermissionManagement = () => {
@@ -34,14 +37,18 @@ const PermissionManagement = () => {
   const handleCustomAction = (id: number) => {
     // console.log("Custom Action", id);
     if (id == 10279) {
-      setInitialIds(["grid"]);
+      setInitialIds([]);
     } else {
-      setInitialIds(["charts"]);
+      setInitialIds([]);
     }
   };
 
   const handleSubmit = async (data: string[]) => {
-    console.log("page: ", data);
+    console.log("submit: ", data);
+  };
+
+  const handelDelete = async (id: number) => {
+    console.log("delete: ", id);
   };
 
   // 示例数据的列定义
@@ -55,34 +62,30 @@ const PermissionManagement = () => {
       width: 200,
       renderCell: (params) => {
         return (
-          <div>
+          <Box sx={{ display: "flex", gap: 3 }}>
             {/* <Button variant="contained">新增权限</Button> */}
             <Permission
               triggerButton={
-                <Button
-                  variant="text"
-                  color="primary"
-                  startIcon={<EditIcon />} // 图标位于左侧
+                <EditIconButton
                   onClick={() => handleCustomAction(params.row.tid)}
-                >
-                  edit
-                </Button>
+                />
               }
               initialSeleted={initialIds}
               onSubmit={handleSubmit}
             ></Permission>
-          </div>
+            <DeleteIconButton onClick={() => handelDelete(params.row.tid)} />
+          </Box>
         );
       },
     },
   ];
 
+  // onClick={() => handelDelete(params.row.tid)}
+
   return (
     <div>
       <CssBaseline />
-      <Typography variant="h5">
-        {t("page.management.permission_management")}
-      </Typography>
+      <Typography variant="h5">{t("menu.permission_management")}</Typography>
       <div style={{ textAlign: "center", marginTop: "10px" }}>
         <DataTable
           columns={columns}

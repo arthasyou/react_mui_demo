@@ -63,6 +63,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           }}
         >
           {/* 使用 ErrorMessage 组件 */}
+          <CssBaseline />
           <ErrorTip message={error} visible={!!error} />
 
           <TextField

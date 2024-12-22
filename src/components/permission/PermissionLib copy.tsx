@@ -209,7 +209,7 @@ export default function PermissionLib({
 
   return (
     <Box sx={{ p: 3, minHeight: 352, minWidth: 290 }}>
-      <Typography variant="h6">{t("menu.permission_management")}</Typography>
+      <Typography>权限管理</Typography>
       <Box sx={{ mt: 2, mb: 5, gap: 2, display: "flex", alignItems: "center" }}>
         <FormControl sx={{ height }}>
           <TextField
