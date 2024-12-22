@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { TextField, Button, Box, Typography, Container } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Container,
+  CssBaseline,
+} from "@mui/material";
 
 import { login } from "@/api/userApi";
 import ErrorTip from "@/components/common/ErrorTip";
@@ -36,6 +43,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
   return (
     <Container component="main" maxWidth="xs">
+      <CssBaseline />
       <Box
         sx={{
           display: "flex",

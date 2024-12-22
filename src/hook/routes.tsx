@@ -2,10 +2,12 @@ import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Login from "@/pages/Login";
 
-import { RootState } from "./stores/store";
+import { RootState } from "../stores/store";
 import { useSelector } from "react-redux";
 import { Route } from "react-router";
-import Welcome from "./pages/Welcome";
+import Welcome from "../pages/Welcome";
+import PermissionManagement from "../pages/management/PermissionManagement";
+import { names, paths } from "./constants";
 
 export interface RouteConfig {
   name: string;
@@ -17,23 +19,28 @@ export interface RouteConfig {
 // 定义路由配置
 export const routes: RouteConfig[] = [
   {
-    name: "home",
-    path: "/",
+    name: names.home,
+    path: paths.home,
     element: <Home />,
   },
   {
     name: "welcome",
-    path: "/welcome",
+    path: paths.welcome,
     element: <Welcome />,
   },
   {
     name: "about",
-    path: "/about",
+    path: paths.about,
     element: <About />,
   },
   {
+    name: "permission_management",
+    path: paths.management.permission,
+    element: <PermissionManagement />,
+  },
+  {
     name: "login",
-    path: "/login",
+    path: paths.login,
     element: <Login />,
   },
 ];

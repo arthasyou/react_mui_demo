@@ -1,4 +1,28 @@
 {
   "welcome": "Welcome to React",
-  "description": "This is an example of i18n."
+  "description": "This is an example of i18n.",
+  "sn": "SN",
+  "id": "ID",
+  "name": "Name",
+  "action": "Action",
+
+  "menu": {
+    "home": "Home",
+    "management": "Management",
+    "permission": "Permission Management",
+    "admin": "Admin"
+  },
+  "page": {
+    "home": {
+      "title": "Home",
+      "description": "This is the home page."
+    },
+    "management": {
+      "permission_management": "Permission Management",
+      "permission": {
+        "title": "Permission",
+        "description": "This is the permission page."
+      }
+    }
+  }
 }

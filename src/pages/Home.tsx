@@ -11,6 +11,7 @@ import {
   QueryDateTime,
 } from "@/components/data/QueryForm"; // 引入 QueryForm 组件
 import { useQueryParams, QueryParamsType } from "@/hook/useQeuryParams";
+import { useCallback } from "react";
 
 // 示例数据的列定义
 const columns: GridColDef[] = [
@@ -43,21 +44,23 @@ const Home = () => {
     time: 1734152314000,
   });
 
-  // 动态更新的数据获取函数
-  const fetchGameRecords = async (page: number, pageSize: number) => {
-    const payload = {
-      skip: page * pageSize, // 计算分页的偏移量
-      limit: pageSize, // 每页条数
-      ...queryParams, // 将查询参数传递给 API
-    };
+  const fetchData = useCallback(
+    async (page: number, pageSize: number) => {
+      const payload = {
+        skip: page * pageSize, // 计算分页的偏移量
+        limit: pageSize, // 每页条数
+        ...queryParams, // 将查询参数传递给 API
+      };
 
-    // console.log(payload);
-    const response = await getGameRecord(payload);
-    return {
-      rows: response.records, // 返回数据记录
-      totalCount: response.total, // 返回总记录数
-    };
-  };
+      // console.log(payload);
+      const response = await getGameRecord(payload);
+      return {
+        rows: response.records, // 返回数据记录
+        totalCount: response.total, // 返回总记录数
+      };
+    },
+    [queryParams]
+  );
 
   // 处理搜索按钮的点击事件，更新查询参数
   const handleSearch = (newParams: QueryParamsType) => {
@@ -98,7 +101,7 @@ const Home = () => {
 
         <DataTable
           columns={columns}
-          fetchData={fetchGameRecords} // 将 fetchGameRecords 传递给 DataTable
+          fetchData={fetchData} // 将 fetchGameRecords 传递给 DataTable
           getRowIdKey="tid"
         />
       </div>

@@ -9,7 +9,7 @@ import { DrawerHeader } from "./components/Header";
 import Login from "./pages/Login";
 import { userInfo } from "./api/userApi";
 import { getTheme, locales } from "@/theme";
-import { renderRoutes, useDynamicRouter } from "./routes";
+import { renderRoutes, useDynamicRouter } from "./hook/routes";
 
 // 自定义 Hook: 处理登录状态
 const useAuth = () => {

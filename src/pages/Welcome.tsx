@@ -1,9 +1,9 @@
 import { CssBaseline, Typography, Button, Box } from "@mui/material";
-import { useTranslation } from "react-i18next"; // 引入 useTranslation 钩子
-import "@/i18n/i18n"; // 引入 i18n 配置文件
+import { useTranslation } from "react-i18next";
+import "@/i18n/i18n";
 
 const Welcome = () => {
-  const { t, i18n } = useTranslation(); // 获取 t 函数和 i18n 实例
+  const { t, i18n } = useTranslation();
 
   // 切换语言的函数
   const handleChangeLanguage = (lang: "en" | "zhCN") => {

@@ -2,40 +2,37 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { RootState } from "@/stores/store";
 import { useSelector } from "react-redux";
+import { names, paths } from "./constants";
 
 // 定义菜单项的类型
 export interface MenuItem {
   name: string;
+  label: string;
   icon: React.ReactNode;
-  url: string;
+  url?: string;
   children?: MenuItem[];
 }
 
 // 静态菜单定义（基础结构，permission 不赋值）
 const menu: MenuItem[] = [
   {
-    name: "Inbox",
+    name: names.home,
+    label: "menu.home",
     icon: <InboxIcon />,
-    url: "/",
-    children: [
-      {
-        name: "Starred",
-        icon: <MailIcon />,
-        url: "/about",
-        children: [
-          {
-            name: "Archived",
-            icon: <MailIcon />,
-            url: "/about",
-          },
-        ],
-      },
-    ],
+    url: paths.home,
   },
   {
-    name: "Sent mail",
+    name: names.management,
+    label: "menu.management",
     icon: <MailIcon />,
-    url: "/",
+    children: [
+      {
+        name: names.permission_management,
+        label: "menu.permission_management",
+        icon: <MailIcon />,
+        url: paths.management.permission,
+      },
+    ],
   },
 ];
 

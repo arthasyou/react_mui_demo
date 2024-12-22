@@ -9,7 +9,8 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Collapse } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useTheme } from "@mui/material/styles";
-import { MenuItem } from "./Menu";
+import { MenuItem } from "../../hook/menu";
+import { useTranslation } from "react-i18next";
 
 interface DrawerListProps {
   items: MenuItem[]; // 菜单项列表
@@ -17,6 +18,7 @@ interface DrawerListProps {
 }
 
 const DrawerList: React.FC<DrawerListProps> = ({ items, open }) => {
+  const { t } = useTranslation();
   const [openChildren, setOpenChildren] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -95,7 +97,7 @@ const DrawerList: React.FC<DrawerListProps> = ({ items, open }) => {
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
-                  primary={item.name}
+                  primary={t(item.label)}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
                 {item.children &&

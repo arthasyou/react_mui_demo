@@ -6,7 +6,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import IconButton from "@mui/material/IconButton";
 import { DrawerHeader } from "../Header";
 import DrawerList from "./DrawerList";
-import { useMenu } from "./Menu";
+import { useMenu } from "../../hook/menu";
 
 const drawerWidth = 240;
 

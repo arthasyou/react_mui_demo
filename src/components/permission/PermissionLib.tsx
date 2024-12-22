@@ -61,10 +61,14 @@ const isChild = (id: string, items: TreeViewBaseItem[]) => {
 
 interface PermissionProps {
   onSubmit: () => void;
+  initialSeleted?: string[];
 }
 
-export default function PermissionLib({ onSubmit }: PermissionProps) {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+export default function PermissionLib({
+  onSubmit,
+  initialSeleted = [],
+}: PermissionProps) {
+  const [selectedIds, setSelectedIds] = useState<string[]>(initialSeleted);
 
   const handleSelectionChange = (
     _event: React.SyntheticEvent,
