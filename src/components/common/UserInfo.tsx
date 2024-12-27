@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { logout } from "@/api/userApi"; // 导入 logout API
+import { setRoles } from "@/features/permissionSlice";
+import { useDispatch } from "react-redux";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -25,6 +27,12 @@ function UserInfo() {
   // 关闭菜单
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const dispatch = useDispatch();
+  const changeRole = () => {
+    const newRoles = ["user"]; // 新的角色数组
+    dispatch(setRoles(newRoles)); // 调用 setRoles
   };
 
   // 处理注销功能
@@ -70,7 +78,11 @@ function UserInfo() {
                     handleLogout(); // 如果点击的是 Logout，则调用注销函数
                     handleCloseUserMenu();
                   }
-                : handleCloseUserMenu
+                : () => {
+                    // 如果点击的是其他选项，则关闭菜单
+                    changeRole();
+                    handleCloseUserMenu();
+                  }
             }
           >
             <Typography sx={{ textAlign: "center" }}>{setting}</Typography>

@@ -56,7 +56,13 @@ export default function CustomAppBar({
         <Typography variant="h6" noWrap component="div">
           Admin
         </Typography>
+
         <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
+        <Box sx={{ display: "flex", mr: 2, gap: 2 }}>
+          {/* Todo 请在下面这个box里面添加一个按钮可以切换 theme light 和 dark  使用 iconbutton 图标使用太阳和月亮*/}
+          {/* <ThemeToggleButton theme={theme} setTheme={setTheme} /> */}
+          <div>456</div>
+        </Box>
         <UserInfo />
       </Toolbar>
     </AppBar>

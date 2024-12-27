@@ -2,6 +2,7 @@ export const names = {
   home: "home",
   management: "management",
   permission_management: "permission_management",
+  abc: "abc",
 };
 
 export const paths = {

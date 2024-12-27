@@ -1,6 +1,6 @@
 // import { useState } from "react";
 
-import { Box, CssBaseline, Typography } from "@mui/material";
+import { Box, CssBaseline, Paper, Typography } from "@mui/material";
 import DataTable from "@/components/data/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { getGameRecord } from "@/api/gameRecordApi";
@@ -89,13 +89,13 @@ const PermissionManagement = () => {
       <Typography variant="h5">{t("menu.permission_management")}</Typography>
       <Toolbar></Toolbar>
 
-      <Box sx={{ width: "100%", height: "100%" }}>
+      <Paper sx={{ flex: 1, width: "100%", height: "100%" }}>
         <DataTable
           columns={columns}
           fetchData={fetchData} // 将 fetchGameRecords 传递给 DataTable
           getRowIdKey="tid"
         />
-      </Box>
+      </Paper>
     </Box>
   );
 };

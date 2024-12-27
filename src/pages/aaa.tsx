@@ -15,31 +15,23 @@ import { useCallback } from "react";
 
 // 示例数据的列定义
 const columns: GridColDef[] = [
-  { field: "tid", headerName: "订单号", width: 90 },
-  { field: "institutionId", headerName: "机构号", width: 90 },
-  { field: "paymentInstitutionId", headerName: "代付机构ID", width: 150 },
-  { field: "paymentInstitutionName", headerName: "代付机构名称", width: 150 },
+  { field: "tid", headerName: "ID", width: 90 },
+  { field: "type", headerName: "Type", width: 150, editable: true },
+  { field: "lastName", headerName: "Last name", width: 150, editable: true },
   {
-    field: "paymentAmount",
-    headerName: "代付金额(元)",
-    width: 120,
+    field: "age",
+    headerName: "Age",
     type: "number",
+    width: 110,
+    editable: true,
   },
-  { field: "bankCardNumber", headerName: "银行卡号", width: 120 },
-  { field: "accountName", headerName: "账户姓名", width: 120 },
-  { field: "paymentStatus", headerName: "代付状态", width: 110 },
-  { field: "paymentResult", headerName: "代付结果", width: 110 },
-  { field: "paymentOrderStatus", headerName: "代付订单状态", width: 150 },
-  { field: "paymentBusiness", headerName: "代付业务", width: 110 },
-  { field: "internalTime", headerName: "代付内部时间", width: 150 },
   {
-    field: "paymentFee",
-    headerName: "代付手续费(元)",
+    field: "fullName",
+    headerName: "Full name",
+    description: "This column has a value getter and is not sortable.",
+    sortable: false,
     width: 160,
-    type: "number",
   },
-  { field: "agent", headerName: "所属代理商", width: 150 },
-  { field: "actions", headerName: "操作", width: 90 },
 ];
 
 // 主页组件

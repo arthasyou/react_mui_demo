@@ -68,9 +68,11 @@ const App: React.FC = () => {
               sx={{
                 flexGrow: 1,
                 p: 3,
-                overflow: "hidden",
+                overflow: open ? "hidden" : "visible",
                 width: "100%",
                 height: "100%",
+                // width: open ? "100%" : `calc(100% - 240px)`,
+                // pr: open ? 35 : 3,
               }}
             >
               <DrawerHeader />
